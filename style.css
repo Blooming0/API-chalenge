@@ -26,10 +26,6 @@ body {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
 }
 
-/* .container {
-    width: 1000px;
-} */
-
 .getPost {
     margin-top: 20px;
     margin-bottom: 10px;
@@ -45,8 +41,6 @@ body {
 .posts {
     width: 94%;
     margin-left: 3%;
-
-
 }
 
 .post {
