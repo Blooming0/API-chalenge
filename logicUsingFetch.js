@@ -1,34 +1,39 @@
 function userSetter() {
-
     let counter = 1;
+    return new Promise((resolve, reject) => {
+        fetch("https://jsonplaceholder.typicode.com/users")
+            .then(response => {
+                if (response.status >= 200 && response.status < 300) {
+                    return response.json()
+                } else {
 
-    fetch("https://jsonplaceholder.typicode.com/users")
-        .then(response => {
-            if (response.status >= 200 && response.status < 300) {
-                return response.json()
-            } else {
-                return alert("eror when getting posts")
-            }
+                    reject("eror when getting posts")
+                }
 
-        })
+            })
 
-        .then(users => {
-            for (user of users) {
-                let contentOfUser =
-                    `
+            .then(users => {
+                for (user of users) {
+                    let contentOfUser =
+                        `
                                     <div class="profail col-3" onclick="GetThePosts(${counter++}, this)" >
                                         <h3 class="name" id="name">${user.name}</h3>
                                         <h5 class="contact">${user.email}</h5>
                                     </div>
                     `
-                let name =
-                    `           
+                    let name =
+                        `           
                                     <h1 id="oma" style="color: black;">${user.name}</h1>
                         `
-                document.getElementById("edit").innerHTML = name
-                document.getElementById("user").innerHTML += contentOfUser
-            }
-        })
+                    document.getElementById("edit").innerHTML = name
+                    document.getElementById("user").innerHTML += contentOfUser
+
+                }
+
+            })
+        resolve()
+    })
+
 }
 
 function GetThePosts(index, el) {
@@ -70,5 +75,12 @@ function GetThePosts(index, el) {
     }
     el.classList.add("selected")
 }
+
 userSetter()
-GetThePosts(1)
+    .then(() => {
+        GetThePosts(1)
+    })
+    .catch((error) => {
+        console.log(error)
+    })
+
