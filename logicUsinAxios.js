@@ -1,43 +1,38 @@
 function userSetter() {
     return new Promise((resolve, reject) => {
+        //the special things in axios library is : you don't need to check the response status and =>
+        //if somthing bad happend for EX the status was over 300 or less than 200 the catch(mrthod aftar then) will handle the error .  
         axios.get("https://jsonplaceholder.typicode.com/users")
             .then(response => {
-                if (response.status >= 200 && response.status < 300) {
-                    let users = response.data
-                    let counter = 1;
-                    for (user of users) {
-                        let contentOfUser =
-                            `
+                let users = response.data
+                let counter = 1;
+                for (user of users) {
+                    let contentOfUser =
+                        `
                                 <div class="profail col-3" onclick="GetThePosts(${counter++}, this)" >
                                     <h3 class="name" id="name">${user.name}</h3>
                                     <h5 class="contact">${user.email}</h5>
                                 </div>
                         `
-                        let name =
-                            `           
+                    let name =
+                        `           
                                 <h1  style="color: black;">${user.name}</h1>
                         `
-                        document.getElementById("edit").innerHTML = name
-                        document.getElementById("user").innerHTML += contentOfUser
-
-                    }
-
-                } else {
-
-                    reject("eror when getting posts")
+                    document.getElementById("edit").innerHTML = name
+                    document.getElementById("user").innerHTML += contentOfUser
                 }
-
+                resolve()
             })
-        resolve()
+            .catch((error) => {
+                reject(error);
+            })
     })
 
 }
-
 function GetThePosts(index, el) {
-    
     document.getElementById("posts").innerHTML = ""
-
-    axios.get("https://jsonplaceholder.typicode.com/posts")
+    let url = "https://jsonplaceholder.typicode.com/posts"
+    axios.get(url)
         .then((response) => {
             let posts = response.data;
             for (post of posts) {
@@ -58,23 +53,13 @@ function GetThePosts(index, el) {
                 }
             }
         })
-
-
-
-
-    //somthing new take A note here
-    //selected elements
-
-
-    let selectedElements = document.getElementsByClassName("selected")
-    for (seleced of selectedElements) {
-        seleced.classList.remove("selected")
-    }
-    el.classList.add("selected")
+        .catch(error => {
+            alert(error)
+        })
 }
-
 userSetter()
     .then(() => {
         GetThePosts(1)
+    }).catch((error) => {
+        alert("error happends while geting the users response for more detail : " + error)
     })
-
